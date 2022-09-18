@@ -5,6 +5,7 @@ const session = require("express-session");
 // Routes
 const MainRoute = require("./@routes/MainRoute");
 const UserRoute = require("./@routes/UserRoute");
+const AdminRoute = require("./@routes/AdminRoute");
 const db = require("./@models/Database");
 
 // Session Middleware
@@ -31,6 +32,7 @@ app.set("view engine", "ejs");
 // Routes
 app.use("", MainRoute);
 app.use("/auth", UserRoute);
+app.use("/admin", AdminRoute);
 
 // Listen
 app.listen(3000, () => {
