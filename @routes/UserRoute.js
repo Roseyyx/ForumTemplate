@@ -13,24 +13,32 @@ router.post("/register", async (req,res) => {
     // Check if the user already exists
     let sql = 'SELECT * FROM users WHERE username = ?';
     let data = [username];
-    const user = await db.query(sql, data);
-    if (user.length > 0)
-        return res.status(400).json({error: "User already exists"});
-
-    // Check if the email already in use
-    sql = 'SELECT * FROM users WHERE email = ?';
-    data = [req.body.email];
-    const email = await db.query(sql, data);
-    if (email.length > 0)
-        return res.status(400).json({error: "Email already in use"});
-
-    // Create a new user
-    const simpleCrypto = new SimpleCrypto(password);
-    const encryptedPassword = simpleCrypto.encrypt(password);
-    sql = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
-    data = [req.body.email, username, encryptedPassword];
-    const result = await db.query(sql, data);
-    return res.redirect("/login");
+    const user = db.query(sql, data, (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) {
+            return res.status(400).json({error: "User already exists"});
+        } else {
+            sql = 'SELECT * FROM users WHERE email = ?';
+            data = [req.body.email];
+            const email = db.query(sql, data, (err, result) => {
+                if (err) throw err;
+                if (result.length > 0) {
+                    return res.status(400).json({error: "Email already in use"});
+                } else {
+                        // Create a new user
+                        const simpleCrypto = new SimpleCrypto(password);
+                        const encryptedPassword = simpleCrypto.encrypt(password);
+                        sql = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
+                        data = [req.body.email, username, encryptedPassword];
+                        const result = db.query(sql, data, (err, result) => {
+                            if (err) throw err;
+                            req.session.code = "Successfully registered";
+                            return res.redirect("/login");
+                        });
+                }
+            });
+        }
+    });
 })
 
 router.get("/login", async (req,res) => {

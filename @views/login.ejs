@@ -13,6 +13,11 @@
     <section class="main">
         <div class="container">
             <h1>Login</h1>
+            <% if (code != ''){ %>
+                <div class="error">
+                    <p><%= code %></p>
+                </div>
+            <%}%> 
             <form action="/auth/login">
                 <input type="text" name="username" placeholder="username" class="username">
                 <input type="password" name="password" placeholder="password" class="password">
