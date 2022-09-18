@@ -13,6 +13,7 @@ app.use(session({
     secret: "arty",
     cookie: {maxAge: 300000},
     saveUninitialized: false,
+    resave: false
 }));
 
 // Middlewares

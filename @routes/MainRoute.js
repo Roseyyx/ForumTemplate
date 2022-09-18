@@ -12,7 +12,10 @@ router.get("/login", (req,res) => {
 });
 
 router.get("/register", (req,res) => {
-    return res.render('register');
+    if (req.session.code) 
+        return res.render("register", {code: req.session.code});
+    else
+        return res.render('register');
 })
 
 module.exports = router;

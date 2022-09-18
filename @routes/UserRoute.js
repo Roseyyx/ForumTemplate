@@ -13,32 +13,34 @@ router.post("/register", async (req,res) => {
     // Check if the invite code is valid
     let sql = 'SELECT * FROM invites WHERE code = ?';
     let data = [req.body.invite];
-    const result = db.query(sql, data, (err, result) => {
+    db.query(sql, data, (err, result) => {
         if (err) throw err;
-        if (result.length == 0) return res.status(400).json({error: "Invalid invite code"});
-        if (result[0].used == true) return res.status(400).json({error: "Invite code already used"});
+        if (result.length == 0) { req.session.code = "Invalid invite code"; return res.redirect("/register"); }
+        if (result[0].used == true) { req.session.code = "Invite code already used"; return res.redirect("/register"); }
 
         // Check if the user already exists
         sql = 'SELECT * FROM users WHERE username = ?';
         data = [username];
-        const user = db.query(sql, data, (err, result) => {
+        db.query(sql, data, (err, result) => {
             if (err) throw err;
             if (result.length > 0) {
-                return res.status(400).json({error: "User already exists"});
+                req.session.code = "Username already taken";
+                return res.redirect("/register");
             } else {
                 sql = 'SELECT * FROM users WHERE email = ?';
                 data = [req.body.email];
-                const email = db.query(sql, data, (err, result) => {
+                db.query(sql, data, (err, result) => {
                     if (err) throw err;
                     if (result.length > 0) {
-                        return res.status(400).json({error: "Email already in use"});
+                        req.session.code = "Email already in use";
+                        return res.redirect("/register");
                     } else {
                         // Create a new user
                         const simpleCrypto = new SimpleCrypto(password);
                         const encryptedPassword = simpleCrypto.encrypt(password);
                         sql = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
                         data = [req.body.email, username, encryptedPassword];
-                        const result23 = db.query(sql, data, (err, result) => {
+                       db.query(sql, data, (err, result) => {
                             if (err) throw err;
                             sql = 'SELECT * FROM users WHERE username = ?';
                             data = [username];
@@ -46,7 +48,7 @@ router.post("/register", async (req,res) => {
                                 if (err) throw err;
                                 sql = 'UPDATE invites SET used = ?, usedBy = ? WHERE code = ?';
                                 data = [true, result[0].id, req.body.invite];
-                                const result2 = db.query(sql, data, (err, result) => {
+                                db.query(sql, data, (err, result) => {
                                     if (err) throw err;
                                     req.session.code = "Successfully registered";
                                     return res.redirect("/login");
