@@ -13,7 +13,7 @@
     <section class="main">
         <div class="container">
             <h1>Register</h1>
-            <% if (code != ''){ %>
+            <% if (typeof(code) != "undefined"){ %>
                 <div class="error">
                     <p><%= code %></p>
                 </div>

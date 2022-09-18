@@ -13,12 +13,12 @@
     <section class="main">
         <div class="container">
             <h1>Login</h1>
-            <% if (code != ''){ %>
+            <% if (typeof(code) != "undefined"){ %>
                 <div class="error">
                     <p><%= code %></p>
                 </div>
             <%}%> 
-            <form action="/auth/login">
+            <form action="/auth/login" method="post">
                 <input type="text" name="username" placeholder="username" class="username">
                 <input type="password" name="password" placeholder="password" class="password">
                <button type="submit" class="loginknop">Login</button>

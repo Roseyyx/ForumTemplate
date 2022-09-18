@@ -62,7 +62,7 @@ router.post("/register", async (req,res) => {
     });
 })
 
-router.get("/login", async (req,res) => {
+router.post("/login", async (req,res) => {
     if (!req.body.username || !req.body.password)
         return res.status(400).json({error: "No data provided"});
 
@@ -70,10 +70,19 @@ router.get("/login", async (req,res) => {
     const username = req.body.username.replace(/[^a-zA-Z0-9]/g, "");
     const password = req.body.password.replace(/[^a-zA-Z0-9]/g, "");
 
-    // Encrypt Password
-    let simpleCrypto = new SimpleCrypto(password);
-    let CheckPassword = simpleCrypto.encrypt(password);
-    
+    // Check if the user exists
+    let sql = 'SELECT * FROM users WHERE username = ?';
+    let data = [username];
+    db.query(sql, data, (err, result) => {
+        if (err) throw err;
+        if (result.length == 0) { req.session.code = "Invalid username"; return res.redirect("/login"); }
+        const simpleCrypto = new SimpleCrypto(password);
+        const CheckPassword = simpleCrypto.decrypt(result[0].password);
+        if (CheckPassword != password) { req.session.code = "Invalid password"; return res.redirect("/login"); }
+        req.session.code = "Successfully logged in";
+        req.session.user = result[0];
+        return res.redirect("/login");
+    });
 });
 
 module.exports = router;
