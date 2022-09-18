@@ -1,24 +1,11 @@
 const express = require("express");
-const Surreal = require("surrealdb.js");
 const app = express();
-const db = new Surreal("http://localhost:8000/rpc");
 
 // Routes
 const MainRoute = require("./@routes/MainRoute");
 const UserRoute = require("./@routes/UserRoute");
+const db = require("./@models/Database");
 
-async function ConnectDB(){
-    try{
-        await db.signin({
-            user: 'root',
-            pass: 'root'
-        });
-
-        console.log("[DATABASE]" + "Connected to database");
-    } catch (e){
-        console.log("[ERROR] " + e);
-    }
-}
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -37,5 +24,3 @@ app.use("/auth", UserRoute);
 app.listen(3000, () => {
     console.log("Example app listening on port 3000!");
 });
-
-//ConnectDB();

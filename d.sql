@@ -1,0 +1,1 @@
+CREATE TABLE Users(id int AUTO_INCREMENT, email VARCHAR(255), username VARCHAR(255), password VARCHAR(255), PRIMARY KEY(id));
