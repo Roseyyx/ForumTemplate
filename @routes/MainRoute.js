@@ -5,6 +5,7 @@ router.get("", (req,res) => {
 });
 
 router.get("/login", (req,res) => {
+    if (req.session.user) return res.redirect("/dashboard");
     if (req.session.code != undefined) 
         return res.render("login", {code: req.session.code});
     else
@@ -12,6 +13,7 @@ router.get("/login", (req,res) => {
 });
 
 router.get("/register", (req,res) => {
+    if (req.session.user) return res.redirect("/dashboard");
     if (req.session.code != undefined) 
         return res.render("register", {code: req.session.code});
     else
@@ -19,8 +21,8 @@ router.get("/register", (req,res) => {
 });
 
 router.get("/dashboard", (req,res) => {
-    if (req.session.code != undefined) 
-        return res.render("dashboard", {code: req.session.code});
+    if (req.session.code != undefined && req.session.user != undefined) 
+        return res.render("dashboard", {code: req.session.code, user: req.session.user});
     else
         return res.render('dashboard');
 });

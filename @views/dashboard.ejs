@@ -7,14 +7,18 @@
 
     <link rel="stylesheet" href="css/style.css">
 
-    <title>arty♡ | Home</title>
+    <title>arty♡ | Dashboard</title>
 </head>
 <body>
     <section class="main">
         <div class="container">
             <h1>arty<b>♡</b></h1>
-            <a href="/login"><button class="loginknop">Login</button></a>
-            <a href="/register"><button class="loginknop">Register</button></a>
+            <% if (typeof(code) != "undefined" && typeof(user) != "undefined"){ %>
+                <div class="error">
+                    <p><%= code %></p>
+                </div>
+            <%}%> 
+            <a href="/admin/genInvite"><button class="loginknop">Generate Invite</button></a>
         </div>
     </section>
 </body>

@@ -79,9 +79,9 @@ router.post("/login", async (req,res) => {
         const simpleCrypto = new SimpleCrypto(password);
         const CheckPassword = simpleCrypto.decrypt(result[0].password);
         if (CheckPassword != password) { req.session.code = "Invalid password"; return res.redirect("/login"); }
-        req.session.code = "Successfully logged in";
+        req.session.code = "Welcome: " + username;
         req.session.user = result[0];
-        return res.redirect("/login");
+        return res.redirect("/dashboard");
     });
 });
 

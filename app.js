@@ -11,7 +11,7 @@ const db = require("./@models/Database");
 // Session Middleware
 app.use(session({
     secret: "arty",
-    cookie: {maxAge: 300000},
+    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
     saveUninitialized: false,
     resave: false
 }));
