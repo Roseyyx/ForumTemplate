@@ -76,12 +76,16 @@ router.post("/login", async (req,res) => {
     db.query(sql, data, (err, result) => {
         if (err) throw err;
         if (result.length == 0) { req.session.code = "Invalid username"; return res.redirect("/login"); }
-        const simpleCrypto = new SimpleCrypto(password);
-        const CheckPassword = simpleCrypto.decrypt(result[0].password);
-        if (CheckPassword != password) { req.session.code = "Invalid password"; return res.redirect("/login"); }
-        req.session.code = "Welcome: " + username;
-        req.session.user = result[0];
-        return res.redirect("/dashboard");
+        try {
+            const simpleCrypto = new SimpleCrypto(password);
+            const CheckPassword = simpleCrypto.decrypt(result[0].password);
+            if (CheckPassword != password) { req.session.code = "Invalid password"; return res.redirect("/login"); }
+            req.session.code = "Welcome: " + username;
+            req.session.user = result[0];
+            return res.redirect("/dashboard");
+        } catch (error) {
+            req.session.code = "Invalid password"; return res.redirect("/login");
+        }
     });
 });
 
