@@ -20,7 +20,7 @@ router.get("/register", (req,res) => {
 });
 
 router.get("/dashboard", (req,res) => {
-    if (req.session.user.id == undefined) return res.redirect("/login");
+    if (req.session.user == undefined) return res.redirect("/login");
     // check if user is admin
 
     let sql = 'SELECT * FROM users WHERE id = ?';

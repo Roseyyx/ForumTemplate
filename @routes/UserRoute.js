@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const SimpleCrypto = require("simple-crypto-js").default
 const db = require("../@models/Database");
+const { getIO, setIO} = require("../@models/Socket");
 
 router.post("/register", async (req,res) => {
     if (!req.body.username || !req.body.password || !req.body.email || !req.body.invite) 
@@ -82,7 +83,7 @@ router.post("/login", async (req,res) => {
             if (CheckPassword != password) { req.session.code = "Invalid password"; return res.redirect("/login"); }
             req.session.code = "Welcome: " + username;
             req.session.user = result[0];
-            return res.redirect("/dashboard");
+            return res.redirect("/");
         } catch (error) {
             req.session.code = "Invalid password"; return res.redirect("/login");
         }

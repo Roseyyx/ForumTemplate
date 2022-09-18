@@ -13,9 +13,18 @@
     <section class="main">
         <div class="container">
             <h1>arty<b>♡</b></h1>
+            <p id="count">Users: </p>
             <a href="/login"><button class="loginknop">Login</button></a>
             <a href="/register"><button class="loginknop">Register</button></a>
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        socket.on('user', function(msg){
+            document.getElementById('count').innerHTML += msg + ", ";
+        });
+    </script>
 </body>
 </html>
