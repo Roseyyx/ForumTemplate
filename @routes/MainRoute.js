@@ -38,4 +38,12 @@ router.get("/dashboard", (req,res) => {
 
 });
 
+router.get("/forums", (req,res) => {
+    if (req.session.user == undefined) { req.session.code = "You are not allowed to view this page"; return res.redirect("/login");}
+    if (req.session.code != undefined) 
+        return res.render("forum", {code: req.session.code});
+    else
+        return res.render('forum');
+});
+
 module.exports = router;

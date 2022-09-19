@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const SimpleCrypto = require("simple-crypto-js").default
 const db = require("../@models/Database");
-const { getIO, setIO} = require("../@models/Socket");
 
 router.post("/register", async (req,res) => {
     if (!req.body.username || !req.body.password || !req.body.email || !req.body.invite) 

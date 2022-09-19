@@ -29,7 +29,6 @@ a {
 
 * {
   box-sizing: border-box;
-  animation: anim1 1s;
 }
 
 .main{
@@ -39,6 +38,7 @@ a {
     justify-content: center;
     min-height: 100vh;
     text-align: center;
+    animation: anim1 3s;
 }
 
 .container h1{
